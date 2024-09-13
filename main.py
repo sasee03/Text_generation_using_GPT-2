@@ -4,7 +4,7 @@ import torch
 import zipfile
 
 # Set the device
-torch_device = "cuda" if torch.cuda.is_available() else "cpu"
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Function to unzip the downloaded model into a folder if it's not already extracted
 def unzip_model(zip_path, extract_path):
@@ -18,17 +18,17 @@ def unzip_model(zip_path, extract_path):
 
 # Function to load GPT-2 model and tokenizer from the extracted folder
 def load_gpt2_model(local_model_path):
-    model = GPT2LMHeadModel.from_pretrained(local_model_path).to(torch_device)
-    tokenizer = GPT2Tokenizer.from_pretrained(local_model_path)
-    return model, tokenizer
+    model_tf = GPT2LMHeadModel.from_pretrained(local_model_path).to(device)
+    tokenizer_tf = GPT2Tokenizer.from_pretrained(local_model_path)
+    return model_tf, tokenizer_tf
 
 # Function to generate text using the model and tokenizer
-def generate_text(model, tokenizer, input_text, max_length=100, temperature=1.0):
-    inputs = tokenizer.encode(input_text, return_tensors="pt").to(torch_device)
+def generate_text(model_tf, tokenizer_tf, input_text, max_length=100, temperature=1.0):
+    inputs = tokenizer_tf.encode(input_text, return_tensors="pt").to(device)
 
     # Generate text
     with torch.no_grad():
-        outputs = model.generate(
+        outputs = model_tf.generate(
             inputs,
             max_length=max_length,
             temperature=temperature,
@@ -39,5 +39,5 @@ def generate_text(model, tokenizer, input_text, max_length=100, temperature=1.0)
         )
 
     # Decode and return the generated text
-    generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    generated_text = tokenizer_tf.decode(outputs[0], skip_special_tokens=True)
     return generated_text
