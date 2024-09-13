@@ -2,7 +2,11 @@ import streamlit as st
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
 import base64
-
+# Set custom emoji favicon and app title
+st.set_page_config(
+    page_title="Text Generator",  # Custom title for your app
+    page_icon="📝"                # Custom emoji favicon
+)
 # Function to add background image from a local path
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as f:
@@ -35,7 +39,7 @@ def load_gpt2():
 model, tokenizer = load_gpt2()
 
 # Streamlit app title
-st.title("Interactive GPT-2 Text Generation")
+st.title("GPT-2 Text Generation")
 
 # Input text box
 input_text = st.text_input("Enter some text to start generating:", "")
